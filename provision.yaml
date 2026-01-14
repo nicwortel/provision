@@ -1,0 +1,7 @@
+- name: Provision the local machine
+  hosts: all
+  vars:
+    php_versions: ['8.4', '8.5']
+  roles:
+    - kubernetes
+    - php

@@ -1,0 +1,31 @@
+---
+# See https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
+- name: Add Kubernetes signing key
+  ansible.builtin.apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  become: true
+
+- name: Add apt repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /
+    state: present
+    filename: kubernetes
+  become: true
+
+- name: Install kubectl
+  ansible.builtin.apt:
+    name: kubectl
+  become: true
+
+# See https://k9scli.io/topics/install/
+- name: Download the k9s package
+  ansible.builtin.get_url:
+    url: https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb
+    dest: /tmp/k9s_linux_amd64.deb
+    checksum: sha256:https://github.com/derailed/k9s/releases/latest/download/checksums.sha256
+
+- name: Install k9s
+  ansible.builtin.apt:
+    deb: /tmp/k9s_linux_amd64.deb
+  become: true

@@ -1,0 +1,13 @@
+---
+php_versions: ['']
+php_extensions:
+  - cli
+  - bcmath
+  - curl
+  - gd
+  - intl
+  - mbstring
+  - mysql
+  - redis
+  - xdebug
+  - xml
