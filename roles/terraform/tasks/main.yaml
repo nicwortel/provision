@@ -1,0 +1,16 @@
+---
+- name: Add the repository
+  deb822_repository:
+    name: hashicorp
+    uris: https://apt.releases.hashicorp.com
+    suites: [ "{{ ansible_facts['distribution_release'] }}" ]
+    components: [ main ]
+    architectures: [ amd64 ]
+    signed_by: https://apt.releases.hashicorp.com/gpg
+  become: true
+
+- name: Install Terraform
+  apt:
+    name: terraform
+    update_cache: yes
+  become: true

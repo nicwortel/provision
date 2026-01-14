@@ -1,0 +1,35 @@
+---
+# https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+- name: Add the apt repository
+  deb822_repository:
+    name: docker
+    types: [deb]
+    uris: https://download.docker.com/linux/ubuntu
+    suites: [ "{{ ansible_facts['distribution_release'] }}" ]
+    signed_by: https://download.docker.com/linux/ubuntu/gpg
+    components: [ stable ]
+    architectures: [ amd64 ]
+  become: true
+
+- name: Install Docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+  become: true
+
+# https://docs.docker.com/engine/install/linux-postinstall
+- name: Create the Docker group
+  group:
+    name: docker
+  become: true
+
+- name: Add the user to the Docker group
+  ansible.builtin.user:
+    name: nic
+    groups: docker
+    append: yes
+  become: true

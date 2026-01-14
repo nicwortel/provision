@@ -1,0 +1,5 @@
+---
+- name: Install package
+  ansible.builtin.apt:
+    name: golang-go
+  become: true
