@@ -18,6 +18,11 @@
     update_cache: yes
   become: true
 
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: ~/.local/bin
+    state: directory
+
 # See https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 - name: Download the Composer installer
   get_url:
