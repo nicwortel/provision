@@ -1,14 +1,15 @@
 ---
 # See https://launchpad.net/~ondrej/+archive/ubuntu/php and
 # https://gist.github.com/roib20/27fde10af195cee1c1f8ac5f68be7e9b?permalink_comment_id=5112605#gistcomment-5112605
-- name: Add PHP PPA
+- name: Add PHP package repository
   deb822_repository:
     name: php
     types: [deb]
-    uris: https://ppa.launchpadcontent.net/ondrej/php/ubuntu
-    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xb8dc7e53946656efbce4c1dd71daeaab4ad4cab6
+    uris: https://packages.sury.org/php/
+    signed_by: https://packages.sury.org/php/apt.gpg
     suites: [ "{{ ansible_facts['distribution_release'] }}" ]
     components: [ main ]
+    architectures: [ amd64 ]
   become: true
 
 - name: Install PHP packages
@@ -25,7 +26,7 @@
     checksum: sha384:https://composer.github.io/installer.sig
 
 - name: Install Composer
-  command: php /tmp/composer-installer.php --install-dir={{ ansible_env.HOME }}/.local/bin --filename=composer
+  command: php /tmp/composer-installer.php --install-dir={{ lookup('env','HOME') }}/.local/bin --filename=composer
   args:
     creates: ~/.local/bin/composer
 

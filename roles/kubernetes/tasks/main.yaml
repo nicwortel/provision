@@ -1,16 +1,12 @@
 ---
 # See https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
-- name: Add Kubernetes signing key
-  ansible.builtin.apt_key:
-    url: https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key
-    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-  become: true
-
-- name: Add apt repository
-  ansible.builtin.apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/ /
-    state: present
-    filename: kubernetes
+- name: Add repository
+  deb822_repository:
+    name: kubernetes
+    types: [ deb ]
+    uris: https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/
+    suites: [ / ]
+    signed_by: https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key
   become: true
 
 - name: Install kubectl

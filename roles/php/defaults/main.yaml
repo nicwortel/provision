@@ -5,9 +5,11 @@ php_extensions:
   - bcmath
   - curl
   - gd
+  - imagick
   - intl
   - mbstring
   - mysql
   - redis
   - xdebug
   - xml
+  - zip

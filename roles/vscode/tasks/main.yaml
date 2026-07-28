@@ -1,5 +1,16 @@
 ---
+- name: Add the repository
+  deb822_repository:
+    name: vscode
+    uris: https://packages.microsoft.com/repos/code
+    suites: [ stable ]
+    components: [ main ]
+    architectures: [ amd64 ]
+    signed_by: https://packages.microsoft.com/keys/microsoft.asc
+  become: true
+
 - name: Install VS Code
   apt:
-    deb: https://go.microsoft.com/fwlink/?LinkID=760868
+    name: code
+    update_cache: yes
   become: true

@@ -1,8 +1,8 @@
 - name: Provision the local machine
   hosts: all
   vars:
-    kubernetes_version: 1.35
-    php_versions: ['8.4', '8.5']
+    kubernetes_version: 1.36
+    php_versions: ['8.5']
   roles:
     - docker
     - github
