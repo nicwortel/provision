@@ -6,14 +6,39 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     name: Test
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
+    # The playbook is tested against a bare image, because the runner image
+    # already ships docker, gh, kubectl, go, terraform and php, which hides
+    # missing apt repositories.
+    container: ubuntu:26.04
     steps:
+      # actions/checkout needs git, which install-dependencies.sh cannot provide
+      # until the repository has been checked out.
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get install --yes git
+
       - name: Checkout source code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
 
-      - name: Run Ansible Playbook
-        run: ansible-playbook provision.yaml
+      - name: Install dependencies
+        run: ./install-dependencies.sh
+
+      - name: Create an unprivileged user to provision as
+        run: |
+          useradd --create-home --shell /bin/bash provision
+          echo 'provision ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/provision
+
+      - name: Run the playbook
+        run: sudo.ws --user provision ansible-playbook provision.yaml
+
+      - name: Run the playbook again to verify it is idempotent
+        run: |
+          set -o pipefail
+          sudo.ws --user provision ansible-playbook provision.yaml | tee second-run.log
+          grep --quiet 'changed=0.*failed=0' second-run.log
