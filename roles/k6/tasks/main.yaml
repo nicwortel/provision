@@ -1,4 +1,5 @@
 ---
+# https://grafana.com/docs/k6/latest/set-up/install-k6/#debianubuntu
 - name: Add repository
   deb822_repository:
     name: k6
@@ -6,7 +7,7 @@
     uris: https://dl.k6.io/deb
     suites: [ stable ]
     components: [ main ]
-    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC5AD17C747E3415A3642D57D77C6C491D6AC1D69
+    signed_by: https://dl.k6.io/key.gpg
   become: true
 
 - name: Install package
