@@ -30,10 +30,16 @@
     dest: /tmp/composer-installer.php
     checksum: sha384:https://composer.github.io/installer.sig
 
+- name: Run the Composer installer
+  ansible.builtin.command: php /tmp/composer-installer.php --quiet --install-dir=/tmp --filename=composer
+  changed_when: false
+
 - name: Install Composer
-  command: php /tmp/composer-installer.php --install-dir={{ lookup('env','HOME') }}/.local/bin --filename=composer
-  args:
-    creates: ~/.local/bin/composer
+  ansible.builtin.copy:
+    src: /tmp/composer
+    dest: ~/.local/bin/composer
+    remote_src: true
+    mode: '0755'
 
 # See https://github.com/phar-io/phive?tab=readme-ov-file#getting-phive
 - name: Download PHIVE
