@@ -30,7 +30,7 @@
 
 - name: Add the user to the Docker group
   ansible.builtin.user:
-    name: nic
+    name: "{{ ansible_facts['user_id'] }}"
     groups: docker
     append: yes
   become: true
