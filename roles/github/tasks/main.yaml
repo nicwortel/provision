@@ -14,4 +14,5 @@
 - name: Install gh package
   apt:
     name: gh
+    update_cache: yes
   become: true

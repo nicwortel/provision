@@ -12,6 +12,7 @@
 - name: Install kubectl
   ansible.builtin.apt:
     name: kubectl
+    update_cache: yes
   become: true
 
 # See https://k9scli.io/topics/install/
