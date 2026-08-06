@@ -6,6 +6,7 @@
   roles:
     - docker
     - github
+    - dotfiles
     - golang
     - k6
     - kubernetes

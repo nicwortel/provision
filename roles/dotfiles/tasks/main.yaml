@@ -1,0 +1,14 @@
+---
+- name: Install Stow
+  ansible.builtin.apt:
+    name: stow
+    update_cache: yes
+  become: true
+
+# One-time bootstrap which is not updated when the directory already exists.
+# HTTPS because a fresh machine has no key yet, and the repository is public.
+- name: Clone the dotfiles repository
+  ansible.builtin.git:
+    repo: https://github.com/nicwortel/dotfiles.git
+    dest: ~/projects/dotfiles
+    update: false
