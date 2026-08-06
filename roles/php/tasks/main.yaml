@@ -42,8 +42,11 @@
     mode: '0755'
 
 # See https://github.com/phar-io/phive?tab=readme-ov-file#getting-phive
+# Installed system-wide rather than per-user like Composer, because it manages
+# global phars in /usr/local/bin and so is run under sudo.
 - name: Download PHIVE
   get_url:
     url: https://phar.io/releases/phive.phar
-    dest: ~/.local/bin/phive
+    dest: /usr/local/bin/phive
     mode: '755'
+  become: true
