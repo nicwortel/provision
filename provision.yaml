@@ -3,6 +3,8 @@
   vars:
     php_versions: ['8.5']
   roles:
+    # First, because the php role needs the gnupg it installs
+    - utilities
     - docker
     - dotfiles
     - golang
@@ -11,4 +13,3 @@
     - php
     - trivy
     - vscode
-    - utilities

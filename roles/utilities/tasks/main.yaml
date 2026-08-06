@@ -1,6 +1,8 @@
 ---
-- name: Install bat
+- name: Install utility packages
   ansible.builtin.apt:
-    name: bat
+    name:
+      - bat
+      - gnupg
     update_cache: yes
   become: true
