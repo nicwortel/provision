@@ -1,17 +1,13 @@
 - name: Provision the local machine
   hosts: all
   vars:
-    kubernetes_version: 1.36
     php_versions: ['8.5']
   roles:
     - docker
-    - github
     - dotfiles
     - golang
-    - k6
-    - kubernetes
+    - mise
     - pentesting
     - php
-    - terraform
     - trivy
     - vscode

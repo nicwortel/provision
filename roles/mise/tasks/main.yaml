@@ -1,0 +1,21 @@
+---
+# https://mise.jdx.dev/installing-mise.html#apt
+# repository details from extrepo
+- name: Add the apt repository
+  ansible.builtin.deb822_repository:
+    name: mise
+    types: [ deb ]
+    uris: https://mise.jdx.dev/deb
+    suites: [ stable ]
+    components: [ main ]
+    signed_by: https://mise.jdx.dev/gpg-key.pub
+  become: true
+
+# Only mise itself and pipx, tools are installed by running `mise install` manually.
+- name: Install mise
+  ansible.builtin.apt:
+    name:
+      - mise
+      - pipx
+    update_cache: yes
+  become: true
