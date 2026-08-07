@@ -5,5 +5,5 @@
       - ansible-lint
       - bat
       - gnupg
-    update_cache: yes
+    update_cache: true
   become: true

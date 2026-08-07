@@ -1,7 +1,8 @@
+---
 - name: Provision the local machine
   hosts: all
   vars:
-    php_versions: ['8.5']
+    php_versions: ["8.5"]
   roles:
     # First, because the php role needs the gnupg it installs
     - utilities

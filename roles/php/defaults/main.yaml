@@ -1,5 +1,5 @@
 ---
-php_versions: ['']
+php_versions: [""]
 php_extensions:
   - cli
   - bcmath

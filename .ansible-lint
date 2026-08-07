@@ -1,0 +1,5 @@
+---
+# ansible-lint reformats these as generic YAML, which couples workflow style to
+# a linter that has nothing to say about workflows.
+exclude_paths:
+  - .github/

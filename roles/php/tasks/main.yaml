@@ -2,33 +2,35 @@
 # See https://launchpad.net/~ondrej/+archive/ubuntu/php and
 # https://gist.github.com/roib20/27fde10af195cee1c1f8ac5f68be7e9b?permalink_comment_id=5112605#gistcomment-5112605
 - name: Add PHP package repository
-  deb822_repository:
+  ansible.builtin.deb822_repository:
     name: php
     types: [deb]
     uris: https://packages.sury.org/php/
     signed_by: https://packages.sury.org/php/apt.gpg
-    suites: [ "{{ ansible_facts['distribution_release'] }}" ]
-    components: [ main ]
-    architectures: [ amd64 ]
+    suites: ["{{ ansible_facts['distribution_release'] }}"]
+    components: [main]
+    architectures: [amd64]
   become: true
 
 - name: Install PHP packages
   ansible.builtin.apt:
     name: "{{ ['php'] | product(php_versions) | map('join', '') | product(php_extensions) | map('join', '-') }}"
-    update_cache: yes
+    update_cache: true
   become: true
 
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
     path: ~/.local/bin
     state: directory
+    mode: "0755"
 
 # See https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 - name: Download the Composer installer
-  get_url:
+  ansible.builtin.get_url:
     url: https://getcomposer.org/installer
     dest: /tmp/composer-installer.php
     checksum: sha384:https://composer.github.io/installer.sig
+    mode: "0644"
 
 - name: Run the Composer installer
   ansible.builtin.command: php /tmp/composer-installer.php --quiet --install-dir=/tmp --filename=composer
@@ -39,16 +41,16 @@
     src: /tmp/composer
     dest: ~/.local/bin/composer
     remote_src: true
-    mode: '0755'
+    mode: "0755"
 
 # See https://github.com/phar-io/phive?tab=readme-ov-file#getting-phive
 # Installed system-wide rather than per-user like Composer, because it manages
 # global phars in /usr/local/bin and so is run under sudo.
 - name: Download phive
-  get_url:
+  ansible.builtin.get_url:
     url: https://phar.io/releases/phive.phar
     dest: /usr/local/bin/phive
-    mode: '755'
+    mode: "755"
   become: true
 
 - name: Install the phive phars
