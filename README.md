@@ -41,3 +41,26 @@ The playbook installs mise itself, but the tool list lives in the dotfiles, so a
 `mise install` rather than a playbook run.
 
 Trivy is the exception: a standalone binary that stays on apt, because of its stronger signature verification.
+
+## Keeping up to date
+
+Each installation method updates separately:
+
+| Tool     | Command                               | Updates                                                                                             |
+|----------|---------------------------------------|-----------------------------------------------------------------------------------------------------|
+| apt      | `sudo apt update && sudo apt upgrade` | Distro packages, including ansible, ansible-lint, mise, docker, php and VS Code                     |
+| mise     | `mise upgrade`                        | The CLI tools listed in the dotfiles, within the ranges in `config.toml`. `--bump` moves the ranges |
+| Composer | `composer self-update`                | `~/.local/bin/composer`                                                                             |
+| phive    | `sudo phive selfupdate`               | `/usr/local/bin/phive` itself                                                                       |
+
+### Phars
+
+The phars phive installed are not covered by any of these.
+`phive update` and `phive outdated` read a project's `phive.xml`, which a `--global` install never writes,
+so both ignore them.
+List what is installed with `sudo phive status --global`, then move a phar to a newer version by reinstalling it
+with the key fingerprint from `roles/php/defaults/main.yaml`:
+
+```bash
+sudo phive install --global --trust-gpg-keys <key> <phar>
+```
