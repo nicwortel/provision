@@ -9,6 +9,23 @@ permissions:
   contents: read
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      # Injected into the runner's ansible-core venv so it lints against that
+      # ansible; capped below 27 because the major version is the year.
+      - name: Install ansible-lint
+        run: pipx inject --include-apps ansible-core 'ansible-lint<27'
+
+      - name: Lint the playbook
+        run: ansible-lint
+
   test:
     name: Test
     runs-on: ubuntu-latest

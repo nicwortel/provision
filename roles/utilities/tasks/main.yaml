@@ -2,6 +2,7 @@
 - name: Install utility packages
   ansible.builtin.apt:
     name:
+      - ansible-lint
       - bat
       - gnupg
     update_cache: yes
