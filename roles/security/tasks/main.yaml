@@ -1,0 +1,55 @@
+---
+- name: Install unattended-upgrades
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    update_cache: true
+  become: true
+
+# The package's debconf answer is only read by its postinst, so setting it on an
+# already-installed package never rewrites the file it controls. Write the file
+# itself instead. dpkg does not track it as a conffile, so nothing conflicts.
+- name: Enable unattended-upgrades
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Install ufw
+  ansible.builtin.apt:
+    name: ufw
+    update_cache: true
+  become: true
+
+# Published container ports are DNAT'd before INPUT, so this does not reach
+# them. The docker role binds them to loopback instead.
+- name: Deny incoming traffic by default
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+  become: true
+
+- name: Allow mDNS, which network printer discovery needs
+  community.general.ufw:
+    rule: allow
+    port: "5353"
+    proto: udp
+  become: true
+
+# Not the packaged Wsdd profile, which also opens 5357/tcp for advertising this
+# machine. wsdd runs here as --no-host --discovery, so nothing listens there.
+- name: Allow WS-Discovery, which browsing SMB shares needs
+  community.general.ufw:
+    rule: allow
+    port: "3702"
+    proto: udp
+  become: true
+
+- name: Enable ufw
+  community.general.ufw:
+    state: enabled
+  become: true

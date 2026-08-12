@@ -4,7 +4,8 @@
   vars:
     php_versions: ["8.5"]
   roles:
-    # First, because the php role needs the gnupg it installs
+    - security
+    # Before php, which needs the gnupg it installs
     - utilities
     - docker
     - dotfiles

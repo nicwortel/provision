@@ -32,7 +32,10 @@ jobs:
     # The playbook is tested against a bare image, because the runner image
     # already ships docker, gh, kubectl, go, terraform and php, which hides
     # missing apt repositories.
-    container: ubuntu:26.04
+    container:
+      image: ubuntu:26.04
+      # ufw manipulates netfilter rules, which needs NET_ADMIN.
+      options: --cap-add=NET_ADMIN
     steps:
       # actions/checkout needs git, which install-dependencies.sh cannot provide
       # until the repository has been checked out.
