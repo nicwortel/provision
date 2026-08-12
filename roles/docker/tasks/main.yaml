@@ -34,3 +34,26 @@
     groups: docker
     append: true
   become: true
+
+# Published ports are DNAT'd before INPUT, so ufw cannot filter them. Binding
+# them to loopback keeps them off the LAN. Both keys are needed: "ip" covers
+# only the default bridge, "default-network-opts" only the user-defined bridges
+# compose creates, and it applies to networks created after this lands, so
+# existing compose projects need recreating.
+- name: Bind published container ports to loopback by default
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "ip": "127.0.0.1",
+        "default-network-opts": {
+          "bridge": {
+            "com.docker.network.bridge.host_binding_ipv4": "127.0.0.1"
+          }
+        }
+      }
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Restart Docker
