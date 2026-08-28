@@ -1,0 +1,6 @@
+---
+# No podman-compose: `podman compose` runs the docker role's compose plugin.
+- name: Install Podman
+  ansible.builtin.apt:
+    name: podman
+  become: true
