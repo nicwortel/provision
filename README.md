@@ -52,15 +52,20 @@ Each installation method updates separately:
 | mise     | `mise upgrade`                        | The CLI tools listed in the dotfiles, within the ranges in `config.toml`. `--bump` moves the ranges |
 | Composer | `composer self-update`                | `~/.local/bin/composer`                                                                             |
 | phive    | `sudo phive selfupdate`               | `/usr/local/bin/phive` itself                                                                       |
+| phive    | `sudo phive update --global`          | The global phars, within the constraint each was installed with. Also run by the playbook           |
 
 ### Phars
 
-The phars phive installed are not covered by any of these.
-`phive update` and `phive outdated` read a project's `phive.xml`, which a `--global` install never writes,
-so both ignore them.
-List what is installed with `sudo phive status --global`, then move a phar to a newer version by reinstalling it
-with the key fingerprint from `roles/php/defaults/main.yaml`:
+A `--global` install records its constraint in `/root/.phive/global.xml`, which `phive update --global` reads.
+Without an explicit constraint, phive records `^` of the installed version, so updates stay within that major
+version (or minor version, below 1.0).
+`sudo phive status --global` lists what is installed; `phive outdated` has no `--global` option.
+
+To move to a new major version, reinstall with the key fingerprint from `roles/php/defaults/main.yaml`.
 
 ```bash
-sudo phive install --global --trust-gpg-keys <key> <phar>
+sudo phive install --global --trust-gpg-keys <key> <phar>@^3.0
 ```
+
+`phive update` cannot be told to trust a key, so a phar signed with a new key fails the playbook run.
+Verify the key, accept it in an interactive `sudo phive update --global`, and update the fingerprint.
