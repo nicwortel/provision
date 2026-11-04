@@ -9,6 +9,7 @@ php_extensions:
   - intl
   - mbstring
   - mysql
+  - pgsql
   - redis
   - xdebug
   - xml
