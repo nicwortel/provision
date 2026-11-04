@@ -8,6 +8,7 @@
     uris: https://mise.jdx.dev/deb
     suites: [stable]
     components: [main]
+    architectures: [amd64]
     signed_by: https://mise.jdx.dev/gpg-key.pub
   become: true
 
