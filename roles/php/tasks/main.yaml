@@ -61,3 +61,12 @@
   become: true
   loop_control:
     label: "{{ item.key }}"
+
+# Updates within the constraint each install recorded in /root/.phive/global.xml.
+# Only a phar download means a new version. The signature and the periodically
+# refreshed repository list are downloaded too, so they are not matched.
+- name: Update the phive phars
+  ansible.builtin.command: phive --no-progress update --global
+  become: true
+  register: php_phive_update
+  changed_when: php_phive_update.stdout is search('^Downloading \S+\.phar \[', multiline=True)
